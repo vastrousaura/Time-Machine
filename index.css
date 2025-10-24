@@ -1,52 +1,147 @@
+:root{
+    --bg-1: #020217;
+    --bg-2: #0b1026;
+    --accent: #7ce7ff;
+    --muted: rgba(255,255,255,0.12);
+    --glass: rgba(255,255,255,0.04);
+    --card-bg: rgba(255,255,255,0.03);
+    --text: #e6f7ff;
+
+    /* responsive spacing */
+    --pad-lg: 28px;
+    --pad-sm: 14px;
+}
+
+*{box-sizing:border-box;}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    background-color: #000000;
+    padding: clamp(16px, 4vw, 40px);
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(124,231,255,0.06), transparent),
+                linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    color: var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
 }
+
+/* Container / card */
 #time-machine-border {
-    border: 2px solid #ffffff;
-    padding: 20px;
-    background-color: #333;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 25%;
-    height: 25%;
+    width: min(980px, 95%);
+    background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid var(--muted);
+    border-radius: 14px;
+    padding: clamp(14px, 3vw, 28px);
+    box-shadow: 0 10px 40px rgba(2,6,23,0.7), 0 2px 6px rgba(0,0,0,0.5);
+    backdrop-filter: blur(6px) saturate(120%);
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    position:relative;
 }
-#Year {
-    font-size: 32px;
-    background: #ffffff;
-    color: #333333;
-    padding: 10px;
-    text-align: left;
-    position: absolute;
-    top: 30%;
-    left: 5%;
-    width: 80%;
+
+/* heading */
+.title{
+    margin:0;
+    font-size: clamp(18px, 3.2vw, 28px);
+    color: #ffffff;
+    text-align:center;
+    letter-spacing:0.4px;
 }
-.editable {
-    padding: 6px 10px;
+
+/* controls row (editable + button) */
+.controls {
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:nowrap;
 }
+
+/* editable element (Year) - full width and touch friendly */
+#Year-date, .editable {
+    display:block;
+    padding: 14px 16px;
+    width:100%;
+    min-height:52px;
+    border-radius:12px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+    border:1px solid rgba(255,255,255,0.06);
+    color:var(--text);
+    font-size: clamp(16px, 4vw, 26px);
+    outline:none;
+    transition: box-shadow 160ms ease, transform 120ms ease, border-color 160ms ease;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.25);
+}
+.editable:focus{
+    box-shadow: 0 8px 28px rgba(124,231,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.3);
+    border-color: rgba(124,231,255,0.28);
+    transform: translateY(-2px);
+}
+
+/* submit button */
 #submit {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
+    background: linear-gradient(180deg, #1dd1ff, #07a0c8);
+    color: rgba(2,6,23,0.98);
+    padding: 12px 18px;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 18px;
-    position: absolute;
-    bottom: 20%;
-    right: 20%;
+    font-size: 16px;
+    font-weight:600;
+    box-shadow: 0 8px 20px rgba(7,160,200,0.18);
+    transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+    flex: 0 0 auto;
+    min-width: 120px;
 }
+#submit:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(7,160,200,0.24);
+    filter:brightness(1.02);
+}
+
+/* display text */
 #display-text {
-    color: red;
-    font-size: 30px;
-    margin-top: 120px;
+    color: var(--accent);
+    font-size: clamp(14px, 2.5vw, 22px);
+    margin-top: 6px;
     text-align: center;
-    position: absolute;
-    width: 100%;
-    left: 0;
+    width:100%;
+    left:0;
+    text-shadow: 0 4px 24px rgba(124,231,255,0.06);
+}
+
+/* small screens: stack and increase tap targets */
+@media (max-width:640px){
+    body { padding: 14px; }
+    #time-machine-border { padding:16px; gap:12px; }
+
+    .controls {
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+    }
+    #submit {
+        width:100%;
+        align-self:stretch;
+        min-width:0;
+        padding: 14px;
+        font-size:16px;
+    }
+    #Year-date, .editable {
+        min-height:56px;
+        font-size: clamp(16px, 5.5vw, 22px);
+        padding: 12px 14px;
+    }
+}
+
+/* very small devices - ensure readable */
+@media (max-width:420px){
+    #time-machine-border { border-radius:10px; padding:12px; }
+    .title { font-size: clamp(16px, 4.5vw, 20px); }
+    #display-text { font-size: 14px; }
 }
